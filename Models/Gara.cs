@@ -24,15 +24,36 @@ namespace GaraSSCuadre.Models
 
         public Gara()
         {
-            Problemi = new List<Problema>() {
-                new Problema(1360), new Problema(9743), new Problema(8904), new Problema(420), new Problema(3960), new Problema(1051), new Problema(198), new Problema(5188), new Problema(12), new Problema(571), new Problema(103), new Problema(27), new Problema(816), new Problema(9813), new Problema(9999), new Problema(448), new Problema(9), new Problema(14)
-            };
-            Squadre = new List<Squadra>()
+            Squadre = new List<Squadra>();
+            Problemi = new List<Problema>();
+
+            bool problemi = true;
+            var lines = File.ReadLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "garaSSC.txt"));
+            foreach (var line in lines)
             {
-                new Squadra("Algebra", Problemi.Count),
-                new Squadra("Geometria", Problemi.Count),
-                new Squadra("Analisi", Problemi.Count)
-            };
+                if (line == "---")
+                {
+                    problemi = false;
+                    continue;
+                }
+                if (problemi)
+                {
+                    if (int.TryParse(line, out int risposta))
+                        Problemi.Add(new Problema(risposta));
+                }
+                else
+                    Squadre.Add(new Squadra(line, Problemi.Count));
+            }
+
+            //Problemi = new List<Problema>() {
+            //    new Problema(1360), new Problema(9743), new Problema(8904), new Problema(420), new Problema(3960), new Problema(1051), new Problema(198), new Problema(5188), new Problema(12), new Problema(571), new Problema(103), new Problema(27), new Problema(816), new Problema(9813), new Problema(9999), new Problema(448), new Problema(9), new Problema(14)
+            //};
+            //Squadre = new List<Squadra>()
+            //{
+            //    new Squadra("Algebra", Problemi.Count),
+            //    new Squadra("Geometria", Problemi.Count),
+            //    new Squadra("Analisi", Problemi.Count)
+            //};
         }
 
         public void TimerEvent(Object? stateInfo)
